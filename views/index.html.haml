@@ -1,0 +1,36 @@
+!!!
+%html
+  %head
+    %title= title
+    :javascript
+      $(document).ready(function() {
+        var server = new Pusher("09435da909450e9b4b6e", "pusherfun-production");
+        server.bind('new_message', function(message) {
+          $(".messages").prepend('<p>' + message + '</p>');
+        });
+        $("#new_message_form").submit(function() {
+          $.post("/messages", $("#new_message_form").serialize(), function(message) {
+            $(".messages").prepend('<p>' + message + '</p>');
+            $(".screen_name_field").hide();
+            $("input#message_input").val("");
+          });
+          return false;
+        });
+      });      
+  %body
+    %fieldset
+      %form{ action: '/messages', id: 'new_message_form', method: 'post' }
+        %p
+          .screen_name_field
+            %label Screen Name:
+            %br
+            %input{ id: 'screen_name_input', name: 'screen_name', type: 'screen_name' }
+        %p
+          .message_field
+            %label Message:
+            %br
+            %input{ id: 'message_input', name: 'message', type: 'text' }
+        %p
+          %input{ name: 'submit', type: 'submit', value: 'Submit' }
+    .messages              
+
