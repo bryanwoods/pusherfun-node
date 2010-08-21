@@ -1,22 +1,10 @@
 !!!
 %html
   %head
+    %script{ src: "http://js.pusherapp.com/1.5/pusher.min.js" }
+    %script{ src: "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" }
+    %script{ src: "/public/application.js" }
     %title= title
-    :javascript
-      $(document).ready(function() {
-        var server = new Pusher("09435da909450e9b4b6e", "pusherfun-production");
-        server.bind('new_message', function(message) {
-          $(".messages").prepend('<p>' + message + '</p>');
-        });
-        $("#new_message_form").submit(function() {
-          $.post("/messages", $("#new_message_form").serialize(), function(message) {
-            $(".messages").prepend('<p>' + message + '</p>');
-            $(".screen_name_field").hide();
-            $("input#message_input").val("");
-          });
-          return false;
-        });
-      });      
   %body
     %fieldset
       %form{ action: '/messages', id: 'new_message_form', method: 'post' }
